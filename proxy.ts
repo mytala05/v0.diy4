@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { guestRegex, isDevelopmentEnvironment } from "./lib/constants";
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Proxy policy branches are intentionally centralized.
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -32,6 +33,22 @@ export async function proxy(request: NextRequest) {
     secret: authSecret,
     secureCookie: !isDevelopmentEnvironment,
   });
+
+  const isAdminRoute = pathname.startsWith("/admincp");
+  const adminEmails = (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+
+  if (
+    isAdminRoute &&
+    !(token?.email && adminEmails.includes(token.email.toLowerCase()))
+  ) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    return new NextResponse("Forbidden", { status: 403 });
+  }
 
   if (!token) {
     // Allow API routes to proceed without authentication for anonymous chat creation
