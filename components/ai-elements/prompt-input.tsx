@@ -198,7 +198,7 @@ export const PromptInputTextarea = ({
   const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     if (e.key === "Enter") {
       // Don't submit if IME composition is in progress
-      if (e.nativeEvent.isComposing) {
+      if (e.nativeEvent.isComposing || e.keyCode === 229) {
         return;
       }
 
