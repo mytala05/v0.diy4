@@ -2,13 +2,32 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { guestRegex, isDevelopmentEnvironment } from "./lib/constants";
 
+function isPublicPath(pathname: string) {
+  return pathname === "/" || ["/login", "/register"].includes(pathname);
+}
+
+function isProtectedPage(pathname: string) {
+  return ["/chats", "/projects"].some((path) => pathname.startsWith(path));
+}
+
+function getAdminEmails() {
+  return (process.env.ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function denyAdminAccess(request: NextRequest, hasToken: boolean) {
+  if (!hasToken) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return new NextResponse("Forbidden", { status: 403 });
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  /*
-   * Playwright starts the dev server and requires a 200 status to
-   * begin the tests, so this ensures that the tests can start
-   */
   if (pathname.startsWith("/ping")) {
     return new Response("pong", { status: 200 });
   }
@@ -17,52 +36,39 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Check for required environment variables
-  if (!process.env.AUTH_SECRET) {
-    console.error(
-      "❌ Missing AUTH_SECRET environment variable. Please check your .env file.",
-    );
-    return NextResponse.next(); // Let the app handle the error with better UI
+  const authSecret = process.env.AUTH_SECRET || process.env.AUTH_SECRET_2;
+  if (!authSecret) {
+    console.error("Missing AUTH_SECRET environment variable.");
+    return NextResponse.next();
   }
 
   const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: authSecret,
     secureCookie: !isDevelopmentEnvironment,
   });
 
-  if (!token) {
-    // Allow API routes to proceed without authentication for anonymous chat creation
-    if (pathname.startsWith("/api/")) {
-      return NextResponse.next();
+  if (pathname.startsWith("/admincp")) {
+    const isAdmin =
+      token?.email && getAdminEmails().includes(token.email.toLowerCase());
+    if (!isAdmin) {
+      return denyAdminAccess(request, Boolean(token));
     }
-
-    // Allow homepage for anonymous users
-    if (pathname === "/") {
-      return NextResponse.next();
-    }
-
-    // Redirect protected pages to login
-    if (["/chats", "/projects"].some((path) => pathname.startsWith(path))) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
-
-    // Allow login and register pages
-    if (["/login", "/register"].includes(pathname)) {
-      return NextResponse.next();
-    }
-
-    // For any other protected routes, redirect to login
-    return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  const isGuest = guestRegex.test(token?.email ?? "");
-
-  if (token && !isGuest && ["/login", "/register"].includes(pathname)) {
+  if (token && !guestRegex.test(token.email ?? "") && isPublicPath(pathname)) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  return NextResponse.next();
+  if (token || pathname.startsWith("/api/") || isPublicPath(pathname)) {
+    return NextResponse.next();
+  }
+
+  if (isProtectedPage(pathname)) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return NextResponse.redirect(new URL("/login", request.url));
 }
 
 export const config = {

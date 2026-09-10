@@ -162,6 +162,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
   const { orientation } = useCarousel();
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: Carousel slides use the ARIA group role for announcements.
     <div
       role="group"
       aria-roledescription="slide"

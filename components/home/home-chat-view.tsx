@@ -46,38 +46,36 @@ export function HomeChatView({
   setRefreshKey,
 }: HomeChatViewProps) {
   return (
-    <>
-      <ResizableLayout
-        className="h-[calc(100vh-64px)]"
-        leftPanel={
-          <>
-            <ChatMessages
-              chatHistory={chatHistory}
-              isLoading={isLoading}
-              onStreamingComplete={handleStreamingComplete}
-              onChatData={handleChatData}
-              onStreamingStarted={() => setIsLoading(false)}
-            />
-
-            <ChatInput
-              message={message}
-              setMessage={setMessage}
-              onSubmit={handleChatSendMessage}
-              isLoading={isLoading}
-              showSuggestions={false}
-            />
-          </>
-        }
-        rightPanel={
-          <PreviewPanel
-            currentChat={currentChat}
-            isFullscreen={isFullscreen}
-            setIsFullscreen={setIsFullscreen}
-            refreshKey={refreshKey}
-            setRefreshKey={setRefreshKey}
+    <ResizableLayout
+      className="h-[calc(100vh-64px)]"
+      leftPanel={
+        <>
+          <ChatMessages
+            chatHistory={chatHistory}
+            isLoading={isLoading}
+            onStreamingComplete={handleStreamingComplete}
+            onChatData={handleChatData}
+            onStreamingStarted={() => setIsLoading(false)}
           />
-        }
-      />
-    </>
+
+          <ChatInput
+            message={message}
+            setMessage={setMessage}
+            onSubmit={handleChatSendMessage}
+            isLoading={isLoading}
+            showSuggestions={false}
+          />
+        </>
+      }
+      rightPanel={
+        <PreviewPanel
+          currentChat={currentChat}
+          isFullscreen={isFullscreen}
+          setIsFullscreen={setIsFullscreen}
+          refreshKey={refreshKey}
+          setRefreshKey={setRefreshKey}
+        />
+      }
+    />
   );
 }

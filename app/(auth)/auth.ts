@@ -5,16 +5,12 @@ import { DUMMY_PASSWORD } from "@/lib/constants";
 import { getUser } from "@/lib/db/queries";
 import { authConfig } from "./auth.config";
 
-const isDevelopment = process.env.NODE_ENV === "development";
+const authSecret = process.env.AUTH_SECRET || process.env.AUTH_SECRET_2;
 
-// Check for required environment variables
-// Set default AUTH_SECRET for development if missing
-if (!process.env.AUTH_SECRET && isDevelopment) {
-  console.warn(
-    "⚠️  AUTH_SECRET not found. Using default secret for development.\n" +
-      "For production, please set AUTH_SECRET in your environment variables.\n",
+if (!authSecret) {
+  throw new Error(
+    "Authentication is not configured. Set AUTH_SECRET before starting the application.",
   );
-  process.env.AUTH_SECRET = "dev-secret-key-not-for-production";
 }
 
 declare module "next-auth" {

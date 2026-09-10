@@ -56,7 +56,7 @@ export function HomeLandingView({
       <div className="w-full max-w-4xl">
         <div className="mb-12 text-center">
           <h2 className="mb-4 font-bold text-4xl text-gray-900 dark:text-white">
-            What can we build together?
+            ماذا سنبني معًا؟
           </h2>
         </div>
 
@@ -78,7 +78,7 @@ export function HomeLandingView({
               ref={textareaRef}
               onChange={(e) => setMessage(e.target.value)}
               value={message}
-              placeholder="Describe what you want to build..."
+              placeholder="صف ما تريد بناءه..."
               className="min-h-20 text-base"
               disabled={isLoading}
             />
@@ -122,7 +122,7 @@ export function HomeLandingView({
 
         <div className="mt-16 text-center text-muted-foreground text-sm">
           <p>
-            Powered by{" "}
+            مدعوم بواسطة{" "}
             <Link
               href="https://v0-sdk.dev"
               className="text-foreground hover:underline"

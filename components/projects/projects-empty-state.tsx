@@ -7,15 +7,15 @@ export function ProjectsEmptyState() {
     <div className="flex flex-col items-center justify-center py-16 text-center">
       <FolderOpen className="h-12 w-12 text-gray-400 dark:text-gray-500" />
       <h3 className="mt-4 font-medium text-gray-900 dark:text-white">
-        No projects yet
+        لا توجد مشاريع بعد
       </h3>
       <p className="mt-1 text-gray-500 text-sm dark:text-gray-400">
-        Get started by creating your first project.
+        ابدأ بإنشاء مشروعك الأول.
       </p>
       <Button asChild className="mt-6">
         <Link href="/">
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
+          <Plus className="me-2 h-4 w-4" />
+          مشروع جديد
         </Link>
       </Button>
     </div>

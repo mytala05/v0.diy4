@@ -148,7 +148,7 @@ export function ChatInput({
             onChange={(e) => setMessage(e.target.value)}
             value={message}
             className="min-h-[60px]"
-            placeholder="Continue the conversation..."
+            placeholder="أكمل المحادثة..."
           />
           <PromptInputToolbar>
             <PromptInputTools>
@@ -164,7 +164,7 @@ export function ChatInput({
                 }}
               />
               <PromptInputSubmit
-                disabled={!message}
+                disabled={!message.trim() && attachments.length === 0}
                 status={isLoading ? "streaming" : "ready"}
               />
             </PromptInputTools>

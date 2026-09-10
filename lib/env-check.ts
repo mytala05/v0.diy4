@@ -22,7 +22,10 @@ export function checkRequiredEnvVars(): MissingEnvVar[] {
   ];
 
   const missing = requiredVars.filter((envVar) => {
-    const value = process.env[envVar.name];
+    const value =
+      envVar.name === "POSTGRES_URL"
+        ? process.env.POSTGRES_URL || process.env.NEON_POSTGRES_URL
+        : process.env[envVar.name];
     return !value || value.trim() === "";
   });
 
@@ -33,6 +36,7 @@ export function hasAllRequiredEnvVars(): boolean {
   return checkRequiredEnvVars().length === 0;
 }
 
-export const hasEnvVars = !!(
-  process.env.AUTH_SECRET && process.env.POSTGRES_URL
+export const hasEnvVars = Boolean(
+  (process.env.AUTH_SECRET || process.env.AUTH_SECRET_2) &&
+    (process.env.POSTGRES_URL || process.env.NEON_POSTGRES_URL),
 );

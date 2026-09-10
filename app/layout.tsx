@@ -1,6 +1,6 @@
 import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
+import { Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { SWRProvider } from "@/components/providers/swr-provider";
@@ -9,10 +9,16 @@ import { StreamingProvider } from "@/contexts/streaming-context";
 import { V0ApiKeyModalProvider } from "@/contexts/v0-api-key-modal-context";
 
 export const metadata: Metadata = {
-  title: "v0.diy - AI for Developers",
+  title: "منصة v0 — مساحة العمل الذكية",
   description:
-    "A clone of v0.app built with the v0 SDK - Generate and preview React components with AI",
+    "منصة عربية لإنشاء الواجهات والتجارب الرقمية باستخدام الذكاء الاصطناعي.",
 };
+
+const notoArabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  variable: "--font-arabic",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -21,10 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ar"
+      dir="rtl"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${GeistMono.variable} ${notoArabic.variable}`}
     >
       <body className="antialiased">
         <ThemeProvider>

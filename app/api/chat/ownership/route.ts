@@ -5,9 +5,10 @@ import { createChatOwnership } from "@/lib/db/queries";
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    const { chatId } = await request.json();
+    const body = await request.json().catch(() => null);
+    const chatId = typeof body?.chatId === "string" ? body.chatId.trim() : "";
 
-    if (!chatId) {
+    if (!chatId || chatId.length > 200) {
       return NextResponse.json(
         { error: "Chat ID is required" },
         { status: 400 },
