@@ -1,5 +1,6 @@
 "use client";
 
+import { Settings } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -78,6 +79,11 @@ export function AppHeader({ className = "" }: AppHeaderProps) {
           </div>
 
           <div className="flex items-center gap-4">
+            <Button variant="ghost" size="icon" asChild aria-label="الإعدادات">
+              <Link href="/settings">
+                <Settings className="size-4" />
+              </Link>
+            </Button>
             <ThemeToggle />
             <Button
               variant="outline"
