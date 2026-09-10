@@ -1,6 +1,6 @@
 import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
+import { Cairo } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { SWRProvider } from "@/components/providers/swr-provider";
@@ -8,10 +8,16 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { StreamingProvider } from "@/contexts/streaming-context";
 import { V0ApiKeyModalProvider } from "@/contexts/v0-api-key-modal-context";
 
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-cairo",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "v0.diy - AI for Developers",
+  title: "منصة v0 — مساحة العمل الذكية",
   description:
-    "A clone of v0.app built with the v0 SDK - Generate and preview React components with AI",
+    "منصة عربية لإنشاء الواجهات والتجارب الرقمية باستخدام الذكاء الاصطناعي.",
 };
 
 export default function RootLayout({
@@ -21,10 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="ar"
+      dir="rtl"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${GeistSans.variable} ${GeistMono.variable}`}
+      className={`${cairo.variable} ${GeistMono.variable}`}
     >
       <body className="antialiased">
         <ThemeProvider>
