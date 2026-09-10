@@ -14,7 +14,8 @@ import {
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -93,12 +94,26 @@ const getPrivacyIcon = (privacy: string) => {
 const getPrivacyDisplayName = (privacy: string) =>
   privacyConfig[privacy as PrivacyType]?.label || "Private";
 
+const fetcher = async (url: string): Promise<Chat[]> => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch chats");
+  }
+  const data = await response.json();
+  return data.data || [];
+};
+
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This coordinator intentionally owns the chat menu actions and dialogs.
 export function ChatSelector() {
   const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [_isLoading, setIsLoading] = useState(false);
+  const {
+    data: chats = [],
+    error: chatsError,
+    isLoading: isChatsLoading,
+    mutate: mutateChats,
+  } = useSWR<Chat[]>(session?.user?.id ? "/api/chats" : null, fetcher);
   const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDuplicateDialogOpen, setIsDuplicateDialogOpen] = useState(false);
@@ -116,30 +131,6 @@ export function ChatSelector() {
   const currentChatId = pathname?.startsWith("/chats/")
     ? pathname.split("/")[2]
     : null;
-
-  // Fetch user's chats
-  useEffect(() => {
-    if (!session?.user?.id) {
-      return;
-    }
-
-    const fetchChats = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch("/api/chats");
-        if (response.ok) {
-          const data = await response.json();
-          setChats(data.data || []);
-        }
-      } catch (error) {
-        console.error("Failed to fetch chats:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchChats();
-  }, [session?.user?.id]);
 
   const handleValueChange = useCallback(
     (chatId: string) => router.push(`/chats/${chatId}`),
@@ -164,10 +155,12 @@ export function ChatSelector() {
       }
 
       const updatedChat = await response.json();
-      setChats((prev) =>
-        prev.map((c) =>
-          c.id === currentChatId ? { ...c, name: updatedChat.name } : c,
-        ),
+      await mutateChats(
+        (currentChats = []) =>
+          currentChats.map((c) =>
+            c.id === currentChatId ? { ...c, name: updatedChat.name } : c,
+          ),
+        { revalidate: false },
       );
       setIsRenameDialogOpen(false);
       setRenameChatName("");
@@ -176,7 +169,7 @@ export function ChatSelector() {
     } finally {
       setIsRenamingChat(false);
     }
-  }, [renameChatName, currentChatId]);
+  }, [renameChatName, currentChatId, mutateChats]);
 
   const handleDeleteChat = useCallback(async () => {
     if (!currentChatId) {
@@ -193,7 +186,11 @@ export function ChatSelector() {
         throw new Error("Failed to delete chat");
       }
 
-      setChats((prev) => prev.filter((c) => c.id !== currentChatId));
+      await mutateChats(
+        (currentChats = []) =>
+          currentChats.filter((c) => c.id !== currentChatId),
+        { revalidate: false },
+      );
       setIsDeleteDialogOpen(false);
       router.push("/");
     } catch (error) {
@@ -201,7 +198,7 @@ export function ChatSelector() {
     } finally {
       setIsDeletingChat(false);
     }
-  }, [currentChatId, router]);
+  }, [currentChatId, router, mutateChats]);
 
   const handleDuplicateChat = useCallback(async () => {
     if (!currentChatId) {
@@ -248,10 +245,12 @@ export function ChatSelector() {
       }
 
       const updatedChat = await response.json();
-      setChats((prev) =>
-        prev.map((c) =>
-          c.id === currentChatId ? { ...c, privacy: updatedChat.privacy } : c,
-        ),
+      await mutateChats(
+        (currentChats = []) =>
+          currentChats.map((c) =>
+            c.id === currentChatId ? { ...c, privacy: updatedChat.privacy } : c,
+          ),
+        { revalidate: false },
       );
       setIsVisibilityDialogOpen(false);
     } catch (error) {
@@ -259,7 +258,7 @@ export function ChatSelector() {
     } finally {
       setIsChangingVisibility(false);
     }
-  }, [currentChatId, selectedVisibility]);
+  }, [currentChatId, selectedVisibility, mutateChats]);
 
   const isAnyActionPending =
     isRenamingChat ||
@@ -293,7 +292,15 @@ export function ChatSelector() {
             </SelectValue>
           </SelectTrigger>
           <SelectContent>
-            {chats.length > 0 ? (
+            {isChatsLoading ? (
+              <div className="px-2 py-1.5 text-muted-foreground text-sm">
+                Loading chats...
+              </div>
+            ) : chatsError ? (
+              <div className="px-2 py-1.5 text-destructive text-sm">
+                Unable to load chats
+              </div>
+            ) : chats.length > 0 ? (
               chats.slice(0, 15).map((chat) => (
                 <SelectItem key={chat.id} value={chat.id}>
                   <div className="flex items-center gap-2">
