@@ -87,9 +87,9 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json().catch(() => null);
-    const apiKey = body?.apiKey;
+    const apiKey = typeof body?.apiKey === "string" ? body.apiKey.trim() : "";
 
-    if (typeof apiKey !== "string" || !(await validateV0ApiKey(apiKey))) {
+    if (!apiKey || apiKey.length > 512 || !(await validateV0ApiKey(apiKey))) {
       return NextResponse.json(
         { error: "Invalid v0 API key" },
         { status: 400 },

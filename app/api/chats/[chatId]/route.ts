@@ -18,7 +18,14 @@ export async function GET(
       );
     }
 
-    if (session?.user?.id) {
+    if (!session?.user?.id) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
+    }
+
+    {
       const ownership = await getChatOwnership({ v0ChatId: chatId });
 
       if (!ownership) {
@@ -49,10 +56,7 @@ export async function GET(
     console.error("Error fetching chat details:", error);
 
     return NextResponse.json(
-      {
-        error: "Failed to fetch chat details",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to fetch chat details" },
       { status: 500 },
     );
   }

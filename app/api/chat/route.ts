@@ -109,13 +109,33 @@ async function executeChatRequest({
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    const { message, chatId, streaming, attachments } = await request.json();
+    const body = await request.json().catch(() => null);
+    const message =
+      typeof body?.message === "string" ? body.message.trim() : "";
+    const chatId =
+      typeof body?.chatId === "string" ? body.chatId.trim() : undefined;
+    const streaming = body?.streaming === true;
+    const attachments = Array.isArray(body?.attachments)
+      ? body.attachments
+          .filter(
+            (attachment: unknown): attachment is { url: string } =>
+              typeof attachment === "object" &&
+              attachment !== null &&
+              typeof (attachment as { url?: unknown }).url === "string" &&
+              (attachment as { url: string }).url.length <= 2048,
+          )
+          .slice(0, 10)
+      : undefined;
 
-    if (!message) {
+    if (!message || message.length > 20_000) {
       return NextResponse.json(
-        { error: "Message is required" },
+        { error: "Message must be between 1 and 20000 characters" },
         { status: 400 },
       );
+    }
+
+    if (chatId && chatId.length > 200) {
+      return NextResponse.json({ error: "Invalid chat ID" }, { status: 400 });
     }
 
     const rateLimitResponse = await checkRateLimit(session);
@@ -151,10 +171,7 @@ export async function POST(request: NextRequest) {
 
     console.error("V0 API Error:", error);
     return NextResponse.json(
-      {
-        error: "Failed to process request",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "Failed to process request" },
       { status: 500 },
     );
   }
