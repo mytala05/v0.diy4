@@ -1,7 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 import { createUser, getUser } from "@/lib/db/queries";
@@ -35,11 +33,10 @@ export async function signInAction(
     await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
-      redirect: false,
+      redirectTo: "/?refresh=session",
     });
 
-    revalidatePath("/");
-    redirect("/?refresh=session");
+    return { type: "success", message: "Authentication succeeded." };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
@@ -89,22 +86,13 @@ export async function signUpAction(
 
     await createUser(validatedData.email, validatedData.password);
 
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       email: validatedData.email,
       password: validatedData.password,
-      redirect: false,
+      redirectTo: "/?refresh=session",
     });
 
-    if (result?.error) {
-      return {
-        type: "error",
-        message:
-          "Failed to sign in after registration. Please try signing in manually.",
-      };
-    }
-
-    revalidatePath("/");
-    redirect("/?refresh=session");
+    return { type: "success", message: "Authentication succeeded." };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
