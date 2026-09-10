@@ -72,7 +72,7 @@ export function AppHeader({ className = "" }: AppHeaderProps) {
               onClick={handleLogoClick}
               className="font-semibold text-gray-900 text-lg hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
             >
-              v0.diy
+              منصة v0
             </Link>
             <ChatSelector />
           </div>
