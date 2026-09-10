@@ -10,10 +10,11 @@ config({
 
 let db: ReturnType<typeof drizzle> | null = null;
 
-// Only initialize database if POSTGRES_URL is available
-if (process.env.POSTGRES_URL) {
-  console.log("🗄️  Using PostgreSQL database");
-  const client = postgres(process.env.POSTGRES_URL);
+const databaseUrl = process.env.POSTGRES_URL || process.env.NEON_POSTGRES_URL;
+
+if (databaseUrl) {
+  console.log("Using PostgreSQL database");
+  const client = postgres(databaseUrl);
   db = drizzle(client, { schema });
 }
 

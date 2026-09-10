@@ -9,14 +9,16 @@ config({
 });
 
 const runMigrate = async () => {
-  if (!process.env.POSTGRES_URL) {
+  const databaseUrl = process.env.POSTGRES_URL || process.env.NEON_POSTGRES_URL;
+
+  if (!databaseUrl) {
     console.log(
-      "POSTGRES_URL is not defined in .env.local or .env, skipping migrations",
+      "No PostgreSQL connection string is defined, skipping migrations",
     );
     process.exit(0);
   }
 
-  const connection = postgres(process.env.POSTGRES_URL, { max: 1 });
+  const connection = postgres(databaseUrl, { max: 1 });
 
   const db = drizzle(connection);
 

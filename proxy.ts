@@ -18,7 +18,9 @@ export async function proxy(request: NextRequest) {
   }
 
   // Check for required environment variables
-  if (!process.env.AUTH_SECRET) {
+  const authSecret = process.env.AUTH_SECRET || process.env.AUTH_SECRET_2;
+
+  if (!authSecret) {
     console.error(
       "❌ Missing AUTH_SECRET environment variable. Please check your .env file.",
     );
@@ -27,7 +29,7 @@ export async function proxy(request: NextRequest) {
 
   const token = await getToken({
     req: request,
-    secret: process.env.AUTH_SECRET,
+    secret: authSecret,
     secureCookie: !isDevelopmentEnvironment,
   });
 

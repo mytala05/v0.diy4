@@ -6,10 +6,11 @@ import { getUser } from "@/lib/db/queries";
 import { authConfig } from "./auth.config";
 
 const isDevelopment = process.env.NODE_ENV === "development";
+const authSecret = process.env.AUTH_SECRET || process.env.AUTH_SECRET_2;
 
 // Check for required environment variables
 // Set default AUTH_SECRET for development if missing
-if (!process.env.AUTH_SECRET && isDevelopment) {
+if (!authSecret && isDevelopment) {
   console.warn(
     "⚠️  AUTH_SECRET not found. Using default secret for development.\n" +
       "For production, please set AUTH_SECRET in your environment variables.\n",
