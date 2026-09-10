@@ -62,14 +62,14 @@ export function UserNav({ session }: UserNavProps) {
           <>
             <DropdownMenuItem asChild>
               <Link href="/projects" className="cursor-pointer">
-                <FolderKanban className="mr-2 h-4 w-4" />
-                <span>Projects</span>
+                <FolderKanban className="me-2 h-4 w-4" />
+                <span>المشاريع</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <Link href="/chats" className="cursor-pointer">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                <span>Chats</span>
+                <MessageSquare className="me-2 h-4 w-4" />
+                <span>المحادثات</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -78,8 +78,8 @@ export function UserNav({ session }: UserNavProps) {
               }}
               className="cursor-pointer"
             >
-              <KeyRound className="mr-2 h-4 w-4" />
-              <span>API Key</span>
+              <KeyRound className="me-2 h-4 w-4" />
+              <span>مفتاح API</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
           </>

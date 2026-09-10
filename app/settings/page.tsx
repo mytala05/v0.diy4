@@ -9,7 +9,23 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import useSWR from "swr";
 import { Button } from "@/components/ui/button";
+
+type Preferences = {
+  notifications_enabled: boolean;
+  updates_enabled: boolean;
+  locale: string;
+};
+
+const fetcher = async (url: string): Promise<Preferences> => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to load preferences");
+  }
+  const result = await response.json();
+  return result.data;
+};
 
 const settings = [
   {
@@ -27,10 +43,55 @@ const settings = [
 ] as const;
 
 export default function SettingsPage() {
+  const {
+    data: preferences,
+    error,
+    isLoading,
+    mutate,
+  } = useSWR("/api/user/preferences", fetcher);
   const [enabled, setEnabled] = useState<Record<string, boolean>>({
     notifications: true,
     updates: false,
   });
+
+  const updatePreference = async (
+    key: "notifications" | "updates",
+    value: boolean,
+  ) => {
+    const next = {
+      notificationsEnabled:
+        key === "notifications"
+          ? value
+          : (preferences?.notifications_enabled ?? true),
+      updatesEnabled:
+        key === "updates" ? value : (preferences?.updates_enabled ?? false),
+      locale: preferences?.locale === "en" ? "en" : "ar",
+    } as const;
+    setEnabled((current) => ({ ...current, [key]: value }));
+    await mutate(
+      async () => {
+        const response = await fetch("/api/user/preferences", {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(next),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to save preferences");
+        }
+        const result = await response.json();
+        return result.data;
+      },
+      {
+        optimisticData: {
+          notifications_enabled: next.notificationsEnabled,
+          updates_enabled: next.updatesEnabled,
+          locale: next.locale,
+        },
+        rollbackOnError: true,
+        revalidate: false,
+      },
+    );
+  };
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
@@ -60,6 +121,13 @@ export default function SettingsPage() {
             تحكم في التنبيهات التي تظهر لك أثناء العمل.
           </p>
         </div>
+        {isLoading ? (
+          <p className="text-muted-foreground text-sm">
+            جارٍ تحميل التفضيلات...
+          </p>
+        ) : error ? (
+          <p className="text-destructive text-sm">تعذر تحميل التفضيلات.</p>
+        ) : null}
         <div className="flex flex-col gap-1">
           {settings.map(({ key, label, description, icon: Icon }) => (
             <div
@@ -77,13 +145,16 @@ export default function SettingsPage() {
               </div>
               <input
                 type="checkbox"
-                checked={enabled[key]}
-                onChange={(event) =>
-                  setEnabled((current) => ({
-                    ...current,
-                    [key]: event.target.checked,
-                  }))
+                checked={
+                  key === "notifications"
+                    ? (preferences?.notifications_enabled ?? enabled[key])
+                    : (preferences?.updates_enabled ?? enabled[key])
                 }
+                onChange={(event) => {
+                  updatePreference(key, event.target.checked).catch(
+                    () => undefined,
+                  );
+                }}
                 aria-label={label}
                 className="size-4 accent-primary"
               />

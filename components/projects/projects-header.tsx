@@ -19,27 +19,27 @@ export function ProjectsHeader({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-bold text-2xl text-gray-900 dark:text-white">
-            Projects
+            المشاريع
           </h1>
           <p className="mt-1 text-gray-600 text-sm dark:text-gray-400">
-            {projectCount} {projectCount === 1 ? "project" : "projects"}
+            {projectCount} {projectCount === 1 ? "مشروع" : "مشاريع"}
           </p>
         </div>
         <Button asChild>
           <Link href="/">
-            <Plus className="mr-2 h-4 w-4" />
-            New Project
+            <Plus className="me-2 h-4 w-4" />
+            مشروع جديد
           </Link>
         </Button>
       </div>
       <div className="relative max-w-md">
-        <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search for a project..."
+          placeholder="ابحث عن مشروع..."
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="pl-10"
+          className="ps-10"
         />
       </div>
     </div>

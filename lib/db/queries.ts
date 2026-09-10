@@ -3,7 +3,13 @@ import "server-only";
 import { and, count, desc, eq, gte, sql } from "drizzle-orm";
 import { decryptV0ApiKey, encryptV0ApiKey } from "@/lib/v0-key-crypto";
 import db from "./connection";
-import { chat_ownerships, type User, users } from "./schema";
+import {
+  chat_ownerships,
+  notifications,
+  type User,
+  user_preferences,
+  users,
+} from "./schema";
 import { generateHashedPassword } from "./utils";
 
 const authUserColumns = {
@@ -254,6 +260,82 @@ export async function deleteChatOwnership({ v0ChatId }: { v0ChatId: string }) {
  * Gets the number of chats created by a user in the specified time window.
  * Used for rate limiting authenticated users.
  */
+export async function getUserPreferences({ userId }: { userId: string }) {
+  const [preferences] = await getDb()
+    .select()
+    .from(user_preferences)
+    .where(eq(user_preferences.user_id, userId));
+
+  return (
+    preferences ?? {
+      user_id: userId,
+      notifications_enabled: true,
+      updates_enabled: false,
+      locale: "ar",
+    }
+  );
+}
+
+export async function upsertUserPreferences({
+  userId,
+  notificationsEnabled,
+  updatesEnabled,
+  locale = "ar",
+}: {
+  userId: string;
+  notificationsEnabled: boolean;
+  updatesEnabled: boolean;
+  locale?: "ar" | "en";
+}) {
+  const [preferences] = await getDb()
+    .insert(user_preferences)
+    .values({
+      user_id: userId,
+      notifications_enabled: notificationsEnabled,
+      updates_enabled: updatesEnabled,
+      locale,
+    })
+    .onConflictDoUpdate({
+      target: user_preferences.user_id,
+      set: {
+        notifications_enabled: notificationsEnabled,
+        updates_enabled: updatesEnabled,
+        locale,
+        updated_at: new Date(),
+      },
+    })
+    .returning();
+
+  return preferences;
+}
+
+export async function getNotifications({ userId }: { userId: string }) {
+  return getDb()
+    .select()
+    .from(notifications)
+    .where(eq(notifications.user_id, userId))
+    .orderBy(desc(notifications.created_at))
+    .limit(30);
+}
+
+export async function markNotificationRead({
+  userId,
+  notificationId,
+}: {
+  userId: string;
+  notificationId: string;
+}) {
+  return getDb()
+    .update(notifications)
+    .set({ read_at: new Date() })
+    .where(
+      and(
+        eq(notifications.id, notificationId),
+        eq(notifications.user_id, userId),
+      ),
+    );
+}
+
 export async function getChatCountByUserId({
   userId,
   differenceInHours,
