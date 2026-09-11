@@ -48,7 +48,7 @@ export function UserNav({ session }: UserNavProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="font-medium text-sm leading-none">
-              {isSignedOut ? "Not signed in" : "User"}
+              {isSignedOut ? "غير مسجل الدخول" : "المستخدم"}
             </p>
             {session?.user?.email && (
               <p className="text-muted-foreground text-xs leading-none">
@@ -88,12 +88,12 @@ export function UserNav({ session }: UserNavProps) {
           <>
             <DropdownMenuItem asChild>
               <a href="/register" className="cursor-pointer">
-                <span>Create Account</span>
+                <span>إنشاء حساب</span>
               </a>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <a href="/login" className="cursor-pointer">
-                <span>Sign In</span>
+                <span>تسجيل الدخول</span>
               </a>
             </DropdownMenuItem>
           </>
@@ -106,8 +106,8 @@ export function UserNav({ session }: UserNavProps) {
             }}
             className="cursor-pointer"
           >
-            <LogOut className="mr-2 h-4 w-4" />
-            <span>Sign out</span>
+            <LogOut className="me-2 h-4 w-4" />
+            <span>تسجيل الخروج</span>
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

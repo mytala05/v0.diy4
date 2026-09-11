@@ -25,7 +25,7 @@ export function AuthForm({ type }: AuthFormProps) {
           htmlFor="email"
           className="block font-medium text-foreground text-sm"
         >
-          Email
+          البريد الإلكتروني
         </label>
         <Input
           id="email"
@@ -44,7 +44,7 @@ export function AuthForm({ type }: AuthFormProps) {
           htmlFor="password"
           className="block font-medium text-foreground text-sm"
         >
-          Password
+          كلمة المرور
         </label>
         <div className="relative">
           <Input
@@ -63,7 +63,9 @@ export function AuthForm({ type }: AuthFormProps) {
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={
+              showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"
+            }
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -88,17 +90,17 @@ export function AuthForm({ type }: AuthFormProps) {
       >
         {isPending
           ? type === "signin"
-            ? "Signing in..."
-            : "Creating account..."
+            ? "جارٍ تسجيل الدخول..."
+            : "جارٍ إنشاء الحساب..."
           : type === "signin"
-            ? "Sign In"
-            : "Create Account"}
+            ? "تسجيل الدخول"
+            : "إنشاء حساب"}
       </Button>
 
       <p className="text-center text-muted-foreground text-sm">
         {type === "signin" ? (
           <>
-            Don&apos;t have an account?{" "}
+            ليس لديك حساب؟{" "}
             <Link
               href="/register"
               className="font-medium text-foreground transition-colors hover:text-primary"

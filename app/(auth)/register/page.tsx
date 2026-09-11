@@ -28,10 +28,10 @@ export default async function RegisterPage() {
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
             <h1 className="font-semibold text-2xl text-foreground tracking-tight">
-              Create an account
+              إنشاء حساب
             </h1>
             <p className="mt-2 text-muted-foreground text-sm">
-              Get started with your free account
+              ابدأ باستخدام حسابك المجاني
             </p>
           </div>
 

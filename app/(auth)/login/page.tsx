@@ -32,7 +32,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         {isRedirectedFromChat && (
           <div className="mb-4 flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-primary">
             <MessageSquare className="h-5 w-5 shrink-0" />
-            <p className="font-medium text-sm">Sign in to start chatting</p>
+            <p className="font-medium text-sm">سجّل الدخول لبدء المحادثة</p>
           </div>
         )}
         <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
@@ -41,10 +41,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
             <h1 className="font-semibold text-2xl text-foreground tracking-tight">
-              Welcome back
+              مرحبًا بعودتك
             </h1>
             <p className="mt-2 text-muted-foreground text-sm">
-              Sign in to your account to continue
+              سجّل الدخول إلى حسابك للمتابعة
             </p>
           </div>
 
