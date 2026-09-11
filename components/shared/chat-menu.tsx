@@ -95,7 +95,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
             disabled={isLoading}
           >
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Open chat menu</span>
+            <span className="sr-only">فتح قائمة المحادثة</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -107,7 +107,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               className="flex items-center"
             >
               <ExternalLink className="mr-2 h-4 w-4" />
-              View on v0.app
+              عرض على v0.app
             </a>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -116,7 +116,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
             disabled={isLoading}
           >
             <Copy className="mr-2 h-4 w-4" />
-            Duplicate Chat
+            نسخ المحادثة
           </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => setIsDeleteDialogOpen(true)}
@@ -124,19 +124,19 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
             variant="destructive"
           >
             <Trash2 className="mr-2 h-4 w-4" />
-            Delete Chat
+            حذف المحادثة
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Duplicate Chat Dialog */}
+      {/* نسخ المحادثة Dialog */}
       <Dialog
         open={isDuplicateDialogOpen}
         onOpenChange={setIsDuplicateDialogOpen}
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Duplicate Chat</DialogTitle>
+            <DialogTitle>نسخ المحادثة</DialogTitle>
             <DialogDescription>
               This will create a copy of the current chat. You'll be redirected
               to the new chat once it's created.
@@ -151,17 +151,17 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               Cancel
             </Button>
             <Button onClick={handleDuplicateChat} disabled={isLoading}>
-              {isLoading ? "Duplicating..." : "Duplicate Chat"}
+              {isLoading ? "جارٍ النسخ..." : "نسخ المحادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Chat Dialog */}
+      {/* حذف المحادثة Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Chat</DialogTitle>
+            <DialogTitle>حذف المحادثة</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this chat? This action cannot be
               undone and will permanently remove the chat and all its messages.
@@ -180,7 +180,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               onClick={handleDeleteChat}
               disabled={isLoading}
             >
-              {isLoading ? "Deleting..." : "Delete Chat"}
+              {isLoading ? "جارٍ الحذف..." : "حذف المحادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>

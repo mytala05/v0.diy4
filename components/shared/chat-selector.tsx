@@ -339,8 +339,8 @@ export function ChatSelector() {
                   rel="noopener noreferrer"
                   className="flex items-center"
                 >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  View on v0.app
+                  <ExternalLink className="me-2 h-4 w-4" />
+                  عرض على v0.app
                 </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -348,8 +348,8 @@ export function ChatSelector() {
                 onClick={() => setIsDuplicateDialogOpen(true)}
                 disabled={isAnyActionPending}
               >
-                <Copy className="mr-2 h-4 w-4" />
-                Duplicate Chat
+                <Copy className="me-2 h-4 w-4" />
+                نسخ المحادثة
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
@@ -359,7 +359,7 @@ export function ChatSelector() {
                 disabled={isAnyActionPending}
               >
                 {getPrivacyIcon(currentChat.privacy || "private")}
-                <span className="ml-2">Change Visibility</span>
+                <span className="ms-2">تغيير الخصوصية</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
@@ -368,7 +368,7 @@ export function ChatSelector() {
                 }}
                 disabled={isAnyActionPending}
               >
-                <Edit2 className="mr-2 h-4 w-4" />
+                <Edit2 className="me-2 h-4 w-4" />
                 Rename Chat
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -377,8 +377,8 @@ export function ChatSelector() {
                 disabled={isAnyActionPending}
                 className="text-destructive focus:text-destructive"
               >
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Chat
+                <Trash2 className="me-2 h-4 w-4" />
+                حذف المحادثة
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -428,11 +428,11 @@ export function ChatSelector() {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Chat Dialog */}
+      {/* حذف المحادثة Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Chat</DialogTitle>
+            <DialogTitle>حذف المحادثة</DialogTitle>
             <DialogDescription>
               Are you sure you want to delete this chat? This action cannot be
               undone and will permanently remove the chat and all its messages.
@@ -451,20 +451,20 @@ export function ChatSelector() {
               onClick={handleDeleteChat}
               disabled={isDeletingChat}
             >
-              {isDeletingChat ? "Deleting..." : "Delete Chat"}
+              {isDeletingChat ? "جارٍ الحذف..." : "حذف المحادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Duplicate Chat Dialog */}
+      {/* نسخ المحادثة Dialog */}
       <Dialog
         open={isDuplicateDialogOpen}
         onOpenChange={setIsDuplicateDialogOpen}
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Duplicate Chat</DialogTitle>
+            <DialogTitle>نسخ المحادثة</DialogTitle>
             <DialogDescription>
               This will create a copy of the current chat. You'll be redirected
               to the new chat once it's created.
@@ -479,13 +479,13 @@ export function ChatSelector() {
               Cancel
             </Button>
             <Button onClick={handleDuplicateChat} disabled={isDuplicatingChat}>
-              {isDuplicatingChat ? "Duplicating..." : "Duplicate Chat"}
+              {isDuplicatingChat ? "جارٍ النسخ..." : "نسخ المحادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Change Visibility Dialog */}
+      {/* تغيير الخصوصية Dialog */}
       <Dialog
         open={isVisibilityDialogOpen}
         onOpenChange={setIsVisibilityDialogOpen}
@@ -583,7 +583,7 @@ export function ChatSelector() {
               onClick={handleChangeVisibility}
               disabled={isChangingVisibility}
             >
-              {isChangingVisibility ? "Changing..." : "Change Visibility"}
+              {isChangingVisibility ? "جارٍ التغيير..." : "تغيير الخصوصية"}
             </Button>
           </DialogFooter>
         </DialogContent>

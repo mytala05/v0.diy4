@@ -84,7 +84,7 @@ export function ResizableLayout({
           isDragging && "bg-blue-500 dark:bg-blue-400",
         )}
         onMouseDown={handleMouseDown}
-        aria-label="Resize panels"
+        aria-label="تغيير حجم اللوحات"
         aria-orientation="vertical"
         aria-valuenow={leftWidth}
         aria-valuemin={10}
@@ -103,7 +103,7 @@ export function ResizableLayout({
       {isDragging && (
         <div
           className={cn(
-            "absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-blue-500 transition-all duration-200 dark:bg-blue-400",
+            "absolute inset-y-0 start-1/2 w-[3px] -translate-x-1/2 bg-primary transition-all duration-200",
           )}
         />
       )}
