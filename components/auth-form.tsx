@@ -6,6 +6,7 @@ import { useActionState, useState } from "react";
 import { signInAction, signUpAction } from "@/app/(auth)/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getDictionary } from "@/lib/i18n";
 
 interface AuthFormProps {
   type: "signin" | "signup";
@@ -17,6 +18,7 @@ export function AuthForm({ type }: AuthFormProps) {
     undefined,
   );
   const [showPassword, setShowPassword] = useState(false);
+  const t = getDictionary("ar");
 
   return (
     <form action={formAction} className="space-y-5">
@@ -25,7 +27,7 @@ export function AuthForm({ type }: AuthFormProps) {
           htmlFor="email"
           className="block font-medium text-foreground text-sm"
         >
-          البريد الإلكتروني
+          {t.email}
         </label>
         <Input
           id="email"
@@ -44,7 +46,7 @@ export function AuthForm({ type }: AuthFormProps) {
           htmlFor="password"
           className="block font-medium text-foreground text-sm"
         >
-          كلمة المرور
+          {t.password}
         </label>
         <div className="relative">
           <Input
@@ -63,9 +65,7 @@ export function AuthForm({ type }: AuthFormProps) {
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-            aria-label={
-              showPassword ? "إخفاء كلمة المرور" : "إظهار كلمة المرور"
-            }
+            aria-label={showPassword ? t.hidePassword : t.showPassword}
           >
             {showPassword ? (
               <EyeOff className="h-4 w-4" />
@@ -90,32 +90,32 @@ export function AuthForm({ type }: AuthFormProps) {
       >
         {isPending
           ? type === "signin"
-            ? "جارٍ تسجيل الدخول..."
-            : "جارٍ إنشاء الحساب..."
+            ? t.signingIn
+            : t.creatingAccount
           : type === "signin"
-            ? "تسجيل الدخول"
-            : "إنشاء حساب"}
+            ? t.signIn
+            : t.accountCreated}
       </Button>
 
       <p className="text-center text-muted-foreground text-sm">
         {type === "signin" ? (
           <>
-            ليس لديك حساب؟{" "}
+            {t.dontHaveAccount}{" "}
             <Link
               href="/register"
               className="font-medium text-foreground transition-colors hover:text-primary"
             >
-              Sign up
+              {t.signUp}
             </Link>
           </>
         ) : (
           <>
-            Already have an account?{" "}
+            {t.alreadyHaveAccount}{" "}
             <Link
               href="/login"
               className="font-medium text-foreground transition-colors hover:text-primary"
             >
-              Sign in
+              {t.signIn}
             </Link>
           </>
         )}

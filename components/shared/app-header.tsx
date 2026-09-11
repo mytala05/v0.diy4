@@ -71,7 +71,7 @@ export function AppHeader({ className = "" }: AppHeaderProps) {
             <Link
               href="/"
               onClick={handleLogoClick}
-              className="font-semibold text-gray-900 text-lg hover:text-gray-700 dark:text-white dark:hover:text-gray-300"
+              className="font-semibold text-foreground text-lg hover:text-primary"
             >
               منصة v0
             </Link>
