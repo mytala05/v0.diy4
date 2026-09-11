@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { guestRegex, isDevelopmentEnvironment } from "./lib/constants";
+import { guestRegex } from "./lib/constants";
 
 function isPublicPath(pathname: string) {
   return pathname === "/" || ["/login", "/register"].includes(pathname);
@@ -45,7 +45,7 @@ export async function proxy(request: NextRequest) {
   const token = await getToken({
     req: request,
     secret: authSecret,
-    secureCookie: !isDevelopmentEnvironment,
+    secureCookie: true,
   });
 
   if (pathname.startsWith("/admincp")) {

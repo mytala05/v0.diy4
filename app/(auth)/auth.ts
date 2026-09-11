@@ -6,6 +6,7 @@ import { getUser } from "@/lib/db/queries";
 import { authConfig } from "./auth.config";
 
 const authSecret = process.env.AUTH_SECRET || process.env.AUTH_SECRET_2;
+const isDevelopment = process.env.NODE_ENV === "development";
 
 if (!authSecret) {
   throw new Error(
@@ -66,6 +67,18 @@ export const {
       },
     }),
   ],
+  trustHost: true,
+  cookies: {
+    sessionToken: {
+      name: "__Secure-authjs.session-token",
+      options: {
+        httpOnly: true,
+        sameSite: isDevelopment ? "none" : "lax",
+        secure: true,
+        path: "/",
+      },
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

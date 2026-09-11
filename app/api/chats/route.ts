@@ -8,7 +8,10 @@ export async function GET(_request: NextRequest) {
     const session = await auth();
 
     if (!session?.user?.id) {
-      return NextResponse.json({ data: [] });
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
     }
 
     const userChatIds = await getChatIdsByUserId({ userId: session.user.id });
