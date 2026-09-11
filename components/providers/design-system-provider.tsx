@@ -15,6 +15,8 @@ type DesignContextValue = DesignPreferences & {
   preview: (preferences: DesignPreferences) => void;
   resetPreview: () => void;
   apply: (preferences: DesignPreferences) => Promise<void>;
+  reset: () => Promise<void>;
+  rollback: () => void;
 };
 
 const DesignContext = createContext<DesignContextValue | null>(null);
@@ -33,6 +35,7 @@ export function DesignSystemProvider({
 }) {
   const { data } = useSWR<DesignPreferences>("/api/user/preferences", fetcher);
   const [saved, setSaved] = useState(defaultDesignPreferences);
+  const [previous, setPrevious] = useState<DesignPreferences | null>(null);
   const [previewed, setPreviewed] = useState<DesignPreferences | null>(null);
   const preferences = previewed ?? saved;
 
@@ -72,11 +75,37 @@ export function DesignSystemProvider({
         if (!response.ok) {
           throw new Error("Unable to save design preferences");
         }
+        setPrevious(saved);
         setSaved(next);
         setPreviewed(null);
       },
+      reset: async () => {
+        const response = await fetch("/api/user/preferences", {
+          method: "PUT",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            notificationsEnabled: true,
+            updatesEnabled: false,
+            locale: "ar",
+            ...defaultDesignPreferences,
+          }),
+        });
+        if (!response.ok) {
+          throw new Error("Unable to reset design preferences");
+        }
+        setPrevious(saved);
+        setSaved(defaultDesignPreferences);
+        setPreviewed(null);
+      },
+      rollback: () => {
+        if (previous) {
+          setSaved(previous);
+          setPrevious(null);
+          setPreviewed(null);
+        }
+      },
     }),
-    [preferences],
+    [preferences, previous, saved],
   );
 
   return (

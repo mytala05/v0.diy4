@@ -197,6 +197,25 @@ export default function SettingsPage() {
             </button>
           ))}
         </div>
+        <div className="mt-6 flex flex-wrap items-center gap-3 border-t pt-5">
+          <Button
+            variant="outline"
+            onClick={() => {
+              if (
+                window.confirm(
+                  "هل تريد إعادة جميع إعدادات التصميم إلى الافتراضي؟",
+                )
+              ) {
+                designSystem.reset().catch(() => undefined);
+              }
+            }}
+          >
+            إعادة الإعدادات الافتراضية
+          </Button>
+          <Button variant="ghost" onClick={designSystem.rollback}>
+            استعادة آخر نسخة
+          </Button>
+        </div>
         <div className="mt-6 grid gap-3 sm:grid-cols-2">
           {fontOptions.map((font) => (
             <button
