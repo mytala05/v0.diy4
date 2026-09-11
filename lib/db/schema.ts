@@ -57,6 +57,20 @@ export const user_preferences = pgTable("user_preferences", {
 
 export type UserPreferences = InferSelectModel<typeof user_preferences>;
 
+export const theme_audit_log = pgTable("theme_audit_log", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  user_id: uuid("user_id").notNull(),
+  action: varchar("action", { length: 32 }).notNull(),
+  previous_style: varchar("previous_style", { length: 32 }),
+  new_style: varchar("new_style", { length: 32 }),
+  previous_font: varchar("previous_font", { length: 32 }),
+  new_font: varchar("new_font", { length: 32 }),
+  theme_version: varchar("theme_version", { length: 32 }),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+export type ThemeAuditLog = InferSelectModel<typeof theme_audit_log>;
+
 export const notifications = pgTable("notifications", {
   id: uuid("id").primaryKey().notNull().defaultRandom(),
   user_id: uuid("user_id").notNull(),

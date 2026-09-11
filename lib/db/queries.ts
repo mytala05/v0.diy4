@@ -6,6 +6,7 @@ import db from "./connection";
 import {
   chat_ownerships,
   notifications,
+  theme_audit_log,
   type User,
   user_preferences,
   users,
@@ -317,6 +318,34 @@ export async function upsertUserPreferences({
     .returning();
 
   return preferences;
+}
+
+export async function logThemeAudit({
+  userId,
+  action,
+  previousStyle,
+  newStyle,
+  previousFont,
+  newFont,
+  themeVersion,
+}: {
+  userId: string;
+  action: "apply" | "reset" | "rollback";
+  previousStyle?: string;
+  newStyle?: string;
+  previousFont?: string;
+  newFont?: string;
+  themeVersion?: string;
+}) {
+  return getDb().insert(theme_audit_log).values({
+    user_id: userId,
+    action,
+    previous_style: previousStyle,
+    new_style: newStyle,
+    previous_font: previousFont,
+    new_font: newFont,
+    theme_version: themeVersion,
+  });
 }
 
 export async function getNotifications({ userId }: { userId: string }) {
