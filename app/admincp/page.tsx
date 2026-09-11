@@ -6,6 +6,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import { designStyles } from "@/lib/design-system";
 
 const metrics = [
   { label: "المستخدمون النشطون", value: "1,284", icon: Users },
@@ -39,6 +40,40 @@ export default function AdmincpPage() {
             <p className="mt-3 font-semibold text-3xl">{value}</p>
           </div>
         ))}
+      </section>
+      <section className="rounded-xl border bg-card p-6">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <div>
+            <h2 className="font-semibold">سجل الأنماط</h2>
+            <p className="text-muted-foreground text-sm">
+              إصدارات مسجلة وقابلة للمعاينة قبل التفعيل.
+            </p>
+          </div>
+          <span className="rounded-full bg-primary/10 px-3 py-1 text-primary text-xs">
+            صلاحية الإدارة
+          </span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {designStyles.map((style) => (
+            <div
+              key={style.id}
+              className="rounded-lg border bg-background/60 p-4"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium">{style.arabicLabel}</span>
+                <span className="text-muted-foreground text-xs">
+                  v{style.version}
+                </span>
+              </div>
+              <p className="mt-2 text-muted-foreground text-sm">
+                {style.description}
+              </p>
+              <span className="mt-3 inline-flex rounded-full bg-muted px-2 py-1 text-xs">
+                متاح للمعاينة
+              </span>
+            </div>
+          ))}
+        </div>
       </section>
       <section className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-xl border bg-card p-6">

@@ -81,6 +81,27 @@
 html[data-style="modern-glass"] {
   --primary: oklch(0.7 0.13 205);
   --radius: 1.1rem;
+  --shadow-card: 0 18px 50px oklch(0.2 0.08 220 / 16%);
+}
+html[data-style="executive"] {
+  --shadow-card: 0 10px 30px oklch(0.18 0.04 230 / 10%);
+}
+html[data-density="compact"] {
+  --density-gap: 0.75rem;
+  --density-control: 2.5rem;
+}
+html[data-density="comfortable"] {
+  --density-gap: 1rem;
+  --density-control: 2.75rem;
+}
+html[data-motion="quiet"] {
+  --motion-duration: 120ms;
+}
+html[data-motion="standard"] {
+  --motion-duration: 180ms;
+}
+html[data-motion="expressive"] {
+  --motion-duration: 260ms;
 }
 html[data-style="futuristic-ai"] {
   --primary: oklch(0.72 0.17 175);
@@ -123,6 +144,16 @@ html[data-style="premium-luxury"] .bg-card {
     @apply bg-background text-foreground;
     min-width: 320px;
     line-height: 1.6;
+    transition:
+      background-color var(--motion-duration) ease,
+      color var(--motion-duration) ease;
+  }
+  button,
+  input,
+  textarea,
+  select,
+  [role="dialog"] {
+    transition-duration: var(--motion-duration);
   }
   :focus-visible {
     outline: 2px solid var(--ring);

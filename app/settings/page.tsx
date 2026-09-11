@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import { useState } from "react";
 import useSWR from "swr";
+import { useDesignSystem } from "@/components/providers/design-system-provider";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -57,6 +58,7 @@ export default function SettingsPage() {
     isLoading,
     mutate,
   } = useSWR<Preferences>("/api/user/preferences", fetcher);
+  const designSystem = useDesignSystem();
   const [enabled, setEnabled] = useState({
     notifications: true,
     updates: false,
@@ -87,6 +89,7 @@ export default function SettingsPage() {
         throw new Error("تعذر حفظ التفضيلات");
       }
       await mutate((await response.json()).data, { revalidate: false });
+      designSystem.resetPreview();
       setPending(null);
     } finally {
       setSaving(false);
@@ -129,12 +132,52 @@ export default function SettingsPage() {
             خصص شكل مساحة العمل. المعاينة مؤقتة حتى تؤكد اختيارك.
           </p>
         </div>
+        <section
+          className="mb-6 overflow-hidden rounded-xl border bg-background/70 p-4"
+          aria-label="معاينة النمط الحالية"
+        >
+          <div className="mb-4 flex items-center justify-between gap-3 border-b pb-3">
+            <div>
+              <p className="font-semibold">معاينة مباشرة</p>
+              <p className="text-muted-foreground text-sm">
+                هذه معاينة حقيقية لعناصر المنصة بالنمط المحدد.
+              </p>
+            </div>
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-primary text-xs">
+              {designSystem.theme.metadata.arabicLabel}
+            </span>
+          </div>
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-3">
+              <span className="size-3 rounded-full bg-primary" />
+              <span className="font-semibold">منصة v0</span>
+              <span className="text-muted-foreground text-sm">
+                مساحة عمل ذكية
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button size="sm">إجراء رئيسي</Button>
+              <Button size="sm" variant="outline">
+                ثانوي
+              </Button>
+              <span className="rounded-md border bg-muted px-3 py-1.5 text-sm">
+                حقل إدخال
+              </span>
+            </div>
+          </div>
+        </section>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {designStyles.map((style) => (
             <button
               key={style.id}
               type="button"
-              onClick={() => setPending({ kind: "style", value: style.id })}
+              onClick={() => {
+                setPending({ kind: "style", value: style.id });
+                designSystem.preview({
+                  style: style.id,
+                  font_family: activeFont,
+                });
+              }}
               className={`group flex min-h-40 flex-col justify-between rounded-2xl border p-4 text-start transition hover:-translate-y-1 hover:border-primary ${activeStyle === style.id ? "border-primary bg-primary/5 ring-2 ring-primary/20" : "bg-background/50"}`}
             >
               <div className="flex items-start justify-between gap-3">
@@ -159,7 +202,13 @@ export default function SettingsPage() {
             <button
               key={font.id}
               type="button"
-              onClick={() => setPending({ kind: "font", value: font.id })}
+              onClick={() => {
+                setPending({ kind: "font", value: font.id });
+                designSystem.preview({
+                  style: activeStyle,
+                  font_family: font.id,
+                });
+              }}
               className={`rounded-xl border p-4 text-start transition hover:border-primary ${activeFont === font.id ? "border-primary bg-primary/5" : ""}`}
             >
               <p
@@ -274,7 +323,12 @@ export default function SettingsPage() {
 
       <Dialog
         open={Boolean(pending)}
-        onOpenChange={(open) => !open && setPending(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setPending(null);
+            designSystem.resetPreview();
+          }
+        }}
       >
         <DialogContent dir="rtl">
           <DialogHeader>
