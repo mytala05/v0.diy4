@@ -60,28 +60,28 @@ const privacyConfig: Record<
 > = {
   public: {
     icon: Eye,
-    label: "Public",
-    description: "Anyone can see this chat",
+    label: "عامة",
+    description: "يمكن لأي شخص رؤية هذه المحادثة",
   },
   private: {
     icon: EyeOff,
-    label: "Private",
-    description: "Only you can see this chat",
+    label: "خاصة",
+    description: "يمكنك أنت فقط رؤية هذه المحادثة",
   },
   team: {
     icon: Users,
-    label: "Team",
-    description: "Team members can see this chat",
+    label: "الفريق",
+    description: "يمكن لأعضاء الفريق رؤية هذه المحادثة",
   },
   "team-edit": {
     icon: Users,
-    label: "Team Edit",
-    description: "Team members can see and edit this chat",
+    label: "تحرير الفريق",
+    description: "يمكن لأعضاء الفريق رؤية هذه المحادثة وتحريرها",
   },
   unlisted: {
     icon: Lock,
-    label: "Unlisted",
-    description: "Only people with the link can see this chat",
+    label: "غير مدرجة",
+    description: "يمكن لمن يملك الرابط فقط رؤية هذه المحادثة",
   },
 };
 
@@ -294,11 +294,11 @@ export function ChatSelector() {
           <SelectContent>
             {isChatsLoading ? (
               <div className="px-2 py-1.5 text-muted-foreground text-sm">
-                Loading chats...
+                جارٍ تحميل المحادثات...
               </div>
             ) : chatsError ? (
               <div className="px-2 py-1.5 text-destructive text-sm">
-                Unable to load chats
+                تعذر تحميل المحادثات
               </div>
             ) : chats.length > 0 ? (
               chats.slice(0, 15).map((chat) => (
@@ -311,7 +311,7 @@ export function ChatSelector() {
               ))
             ) : (
               <div className="px-2 py-1.5 text-muted-foreground text-sm">
-                No chats yet
+                لا توجد محادثات بعد
               </div>
             )}
           </SelectContent>
