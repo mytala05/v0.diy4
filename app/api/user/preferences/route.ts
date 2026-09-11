@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/(auth)/auth";
 import { getUserPreferences, upsertUserPreferences } from "@/lib/db/queries";
+import { isDesignStyle, isFontFamily } from "@/lib/design-system";
 
 export async function GET() {
   const session = await auth();
@@ -28,7 +29,9 @@ export async function PUT(request: NextRequest) {
   if (
     typeof body?.notificationsEnabled !== "boolean" ||
     typeof body?.updatesEnabled !== "boolean" ||
-    (body.locale !== undefined && !["ar", "en"].includes(body.locale))
+    (body.locale !== undefined && !["ar", "en"].includes(body.locale)) ||
+    (body.style !== undefined && !isDesignStyle(body.style)) ||
+    (body.fontFamily !== undefined && !isFontFamily(body.fontFamily))
   ) {
     return NextResponse.json({ error: "Invalid preferences" }, { status: 400 });
   }
@@ -38,6 +41,8 @@ export async function PUT(request: NextRequest) {
     notificationsEnabled: body.notificationsEnabled,
     updatesEnabled: body.updatesEnabled,
     locale: body.locale,
+    style: body.style,
+    fontFamily: body.fontFamily,
   });
 
   return NextResponse.json({ data: preferences });

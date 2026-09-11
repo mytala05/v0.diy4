@@ -17,6 +17,14 @@ export const dictionary = {
     newChat: "محادثة جديدة",
     welcome: "مرحبًا بك في منصتك الذكية",
     description: "أنشئ واجهات وتجارب رقمية احترافية باستخدام الذكاء الاصطناعي.",
+    styleFonts: "النمط والخطوط",
+    chooseStyle: "اختر نمط المنصة",
+    chooseFont: "اختر الخط",
+    preview: "معاينة",
+    apply: "تطبيق",
+    cancel: "إلغاء",
+    saved: "تم الحفظ",
+    loading: "جارٍ التحميل...",
   },
   en: {
     brand: "v0 Platform",
@@ -34,6 +42,14 @@ export const dictionary = {
     welcome: "Welcome to your intelligent workspace",
     description:
       "Create polished digital experiences with artificial intelligence.",
+    styleFonts: "Style & fonts",
+    chooseStyle: "Choose a platform style",
+    chooseFont: "Choose a font",
+    preview: "Preview",
+    apply: "Apply",
+    cancel: "Cancel",
+    saved: "Saved",
+    loading: "Loading...",
   },
 } as const;
 

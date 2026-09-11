@@ -1,7 +1,8 @@
 import { GeistMono } from "geist/font/mono";
 import type { Metadata } from "next";
-import { Noto_Sans_Arabic } from "next/font/google";
+import { Cairo, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
+import { DesignSystemProvider } from "@/components/providers/design-system-provider";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { SWRProvider } from "@/components/providers/swr-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -13,6 +14,12 @@ export const metadata: Metadata = {
   description:
     "منصة عربية لإنشاء الواجهات والتجارب الرقمية باستخدام الذكاء الاصطناعي.",
 };
+
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-cairo",
+  display: "swap",
+});
 
 const notoArabic = Noto_Sans_Arabic({
   subsets: ["arabic"],
@@ -31,17 +38,19 @@ export default function RootLayout({
       dir="rtl"
       suppressHydrationWarning
       data-scroll-behavior="smooth"
-      className={`${GeistMono.variable} ${notoArabic.variable}`}
+      className={`${GeistMono.variable} ${notoArabic.variable} ${cairo.variable}`}
     >
       <body className="antialiased">
         <ThemeProvider>
-          <SessionProvider>
-            <SWRProvider>
-              <V0ApiKeyModalProvider>
-                <StreamingProvider>{children}</StreamingProvider>
-              </V0ApiKeyModalProvider>
-            </SWRProvider>
-          </SessionProvider>
+          <DesignSystemProvider>
+            <SessionProvider>
+              <SWRProvider>
+                <V0ApiKeyModalProvider>
+                  <StreamingProvider>{children}</StreamingProvider>
+                </V0ApiKeyModalProvider>
+              </SWRProvider>
+            </SessionProvider>
+          </DesignSystemProvider>
         </ThemeProvider>
       </body>
     </html>

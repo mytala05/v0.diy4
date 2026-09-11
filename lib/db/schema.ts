@@ -47,6 +47,10 @@ export const user_preferences = pgTable("user_preferences", {
     .default(true),
   updates_enabled: boolean("updates_enabled").notNull().default(false),
   locale: varchar("locale", { length: 8 }).notNull().default("ar"),
+  style: varchar("style", { length: 32 }).notNull().default("executive"),
+  font_family: varchar("font_family", { length: 32 })
+    .notNull()
+    .default("cairo"),
   created_at: timestamp("created_at").notNull().defaultNow(),
   updated_at: timestamp("updated_at").notNull().defaultNow(),
 });

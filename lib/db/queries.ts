@@ -272,6 +272,8 @@ export async function getUserPreferences({ userId }: { userId: string }) {
       notifications_enabled: true,
       updates_enabled: false,
       locale: "ar",
+      style: "executive",
+      font_family: "cairo",
     }
   );
 }
@@ -281,11 +283,15 @@ export async function upsertUserPreferences({
   notificationsEnabled,
   updatesEnabled,
   locale = "ar",
+  style = "executive",
+  fontFamily = "cairo",
 }: {
   userId: string;
   notificationsEnabled: boolean;
   updatesEnabled: boolean;
   locale?: "ar" | "en";
+  style?: string;
+  fontFamily?: string;
 }) {
   const [preferences] = await getDb()
     .insert(user_preferences)
@@ -294,6 +300,8 @@ export async function upsertUserPreferences({
       notifications_enabled: notificationsEnabled,
       updates_enabled: updatesEnabled,
       locale,
+      style,
+      font_family: fontFamily,
     })
     .onConflictDoUpdate({
       target: user_preferences.user_id,
@@ -301,6 +309,8 @@ export async function upsertUserPreferences({
         notifications_enabled: notificationsEnabled,
         updates_enabled: updatesEnabled,
         locale,
+        style,
+        font_family: fontFamily,
         updated_at: new Date(),
       },
     })
