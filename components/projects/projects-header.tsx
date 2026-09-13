@@ -18,10 +18,8 @@ export function ProjectsHeader({
     <div className="mb-8 space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-bold text-2xl text-gray-900 dark:text-white">
-            المشاريع
-          </h1>
-          <p className="mt-1 text-gray-600 text-sm dark:text-gray-400">
+          <h1 className="font-bold text-2xl text-foreground">المشاريع</h1>
+          <p className="mt-1 text-muted-foreground text-sm">
             {projectCount} {projectCount === 1 ? "مشروع" : "مشاريع"}
           </p>
         </div>

@@ -106,7 +106,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               rel="noopener noreferrer"
               className="flex items-center"
             >
-              <ExternalLink className="mr-2 h-4 w-4" />
+              <ExternalLink className="me-2 h-4 w-4" />
               عرض على v0.app
             </a>
           </DropdownMenuItem>
@@ -115,7 +115,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
             onClick={() => setIsDuplicateDialogOpen(true)}
             disabled={isLoading}
           >
-            <Copy className="mr-2 h-4 w-4" />
+            <Copy className="me-2 h-4 w-4" />
             نسخ المحادثة
           </DropdownMenuItem>
           <DropdownMenuItem
@@ -123,7 +123,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
             disabled={isLoading}
             variant="destructive"
           >
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash2 className="me-2 h-4 w-4" />
             حذف المحادثة
           </DropdownMenuItem>
         </DropdownMenuContent>
