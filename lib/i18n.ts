@@ -45,6 +45,12 @@ export const dictionary = {
     updated: "آخر تحديث",
     noChatsYet: "لا توجد محادثات بعد",
     createFirstChat: "ابدأ بإنشاء أول محادثة لك.",
+    project: "مشروع",
+    projectsCount: "مشاريع",
+    newProject: "مشروع جديد",
+    searchProjects: "ابحث عن مشروع...",
+    noProjectsYet: "لا توجد مشاريع بعد",
+    createFirstProject: "ابدأ بإنشاء مشروعك الأول.",
   },
   en: {
     brand: "v0 Platform",
@@ -90,6 +96,12 @@ export const dictionary = {
     updated: "Updated",
     noChatsYet: "No chats yet",
     createFirstChat: "Get started by creating your first chat.",
+    project: "project",
+    projectsCount: "projects",
+    newProject: "New project",
+    searchProjects: "Search for a project...",
+    noProjectsYet: "No projects yet",
+    createFirstProject: "Get started by creating your first project.",
   },
 } as const;
 
