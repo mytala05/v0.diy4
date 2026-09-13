@@ -58,13 +58,13 @@ export function AuthForm({ type }: AuthFormProps) {
             autoComplete={
               type === "signin" ? "current-password" : "new-password"
             }
-            className="h-10 pr-10"
+            className="h-10 pe-10"
             minLength={type === "signup" ? 6 : 1}
           />
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+            className="absolute end-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
             aria-label={showPassword ? t.hidePassword : t.showPassword}
           >
             {showPassword ? (

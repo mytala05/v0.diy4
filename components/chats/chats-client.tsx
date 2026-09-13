@@ -4,6 +4,7 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import useSWR from "swr";
 import { AppHeader } from "@/components/shared/app-header";
+import { getDictionary } from "@/lib/i18n";
 
 interface V0Chat {
   id: string;
@@ -25,14 +26,15 @@ interface ChatsResponse {
 export function ChatsClient() {
   const { data, error, isLoading } = useSWR<ChatsResponse>("/api/chats");
   const chats = data?.data || [];
+  const t = getDictionary("ar");
 
   const getFirstUserMessage = (chat: V0Chat) => {
     const firstUserMessage = chat.messages?.find((msg) => msg.role === "user");
-    return firstUserMessage?.content || "No messages";
+    return firstUserMessage?.content || t.noMessages;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black">
+    <div className="min-h-screen bg-background">
       <AppHeader />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -40,7 +42,7 @@ export function ChatsClient() {
           <div className="flex items-center justify-center py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-gray-900 border-b-2 dark:border-white" />
             <span className="ml-2 text-gray-600 dark:text-gray-300">
-              Loading chats...
+              {t.loadingChats}
             </span>
           </div>
         )}
@@ -50,7 +52,7 @@ export function ChatsClient() {
             <div className="flex">
               <div className="ml-3">
                 <h3 className="font-medium text-red-800 text-sm dark:text-red-200">
-                  Error loading chats
+                  {t.errorLoadingChats}
                 </h3>
                 <p className="mt-1 text-red-700 text-sm dark:text-red-300">
                   {error.message || "Failed to load chats"}
@@ -65,28 +67,28 @@ export function ChatsClient() {
             <div className="mb-6 flex items-center justify-between">
               <div>
                 <h2 className="mb-2 font-bold text-2xl text-gray-900 dark:text-white">
-                  Chats
+                  {t.chats}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300">
-                  {chats.length} {chats.length === 1 ? "chat" : "chats"}
+                  {chats.length} {chats.length === 1 ? t.chat : t.chatsCount}
                 </p>
               </div>
               <Link
                 href="/"
                 className="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 font-medium text-sm text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600"
               >
-                <Plus className="mr-2 h-4 w-4" />
-                New Chat
+                <Plus className="me-2 h-4 w-4" />
+                {t.newChat}
               </Link>
             </div>
 
             {chats.length === 0 ? (
               <div className="py-12 text-center">
                 <h3 className="mt-2 font-medium text-gray-900 text-sm dark:text-white">
-                  No chats yet
+                  {t.noChatsYet}
                 </h3>
                 <p className="mt-1 text-gray-500 text-sm dark:text-gray-400">
-                  Get started by creating your first chat.
+                  {t.createFirstChat}
                 </p>
                 <div className="mt-6">
                   <Link
@@ -106,17 +108,17 @@ export function ChatsClient() {
                     href={`/chats/${chat.id}`}
                     className="group block"
                   >
-                    <div className="rounded-lg border border-border p-6 transition-shadow hover:shadow-md dark:border-input">
+                    <div className="rounded-lg border border-border bg-card p-6 transition-shadow hover:shadow-md">
                       <div className="flex items-start justify-between">
                         <div className="min-w-0 flex-1">
                           <h3 className="truncate font-medium text-gray-900 text-lg transition-colors group-hover:text-blue-600 dark:text-white dark:group-hover:text-blue-400">
                             {chat.name || getFirstUserMessage(chat)}
                           </h3>
                           <div className="mt-2 flex items-center text-gray-500 text-sm dark:text-gray-400">
-                            <span>{chat.messages?.length || 0} messages</span>
+                            <span>{chat.messages?.length || 0} رسائل</span>
                           </div>
                           <p className="mt-2 text-gray-500 text-sm dark:text-gray-400">
-                            Updated{" "}
+                            {t.updated}{" "}
                             {new Date(chat.updatedAt).toLocaleDateString()}
                           </p>
                         </div>
