@@ -148,7 +148,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               onClick={() => setIsDuplicateDialogOpen(false)}
               disabled={isLoading}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button onClick={handleDuplicateChat} disabled={isLoading}>
               {isLoading ? "جارٍ النسخ..." : "نسخ المحادثة"}
@@ -173,7 +173,7 @@ export function ChatMenu({ chatId }: ChatMenuProps) {
               onClick={() => setIsDeleteDialogOpen(false)}
               disabled={isLoading}
             >
-              Cancel
+              إلغاء
             </Button>
             <Button
               variant="destructive"

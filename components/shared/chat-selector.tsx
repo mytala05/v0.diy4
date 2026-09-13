@@ -40,6 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { getDictionary } from "@/lib/i18n";
 
 interface Chat {
   id: string;
@@ -52,7 +53,7 @@ interface Chat {
 type PrivacyType = "public" | "private" | "team" | "team-edit" | "unlisted";
 
 const getChatDisplayName = (chat: Chat): string =>
-  chat.name || `Chat ${chat.id.slice(0, 8)}...`;
+  chat.name || `محادثة ${chat.id.slice(0, 8)}...`;
 
 const privacyConfig: Record<
   PrivacyType,
@@ -92,7 +93,7 @@ const getPrivacyIcon = (privacy: string) => {
 };
 
 const getPrivacyDisplayName = (privacy: string) =>
-  privacyConfig[privacy as PrivacyType]?.label || "Private";
+  privacyConfig[privacy as PrivacyType]?.label || "خاصة";
 
 const fetcher = async (url: string): Promise<Chat[]> => {
   const response = await fetch(url);
@@ -106,6 +107,7 @@ const fetcher = async (url: string): Promise<Chat[]> => {
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This coordinator intentionally owns the chat menu actions and dialogs.
 export function ChatSelector() {
   const router = useRouter();
+  const t = getDictionary("ar");
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
@@ -280,7 +282,7 @@ export function ChatSelector() {
       <div className="flex items-center gap-1">
         <Select value={currentChatId || ""} onValueChange={handleValueChange}>
           <SelectTrigger className="w-fit min-w-37.5 max-w-62.5" size="sm">
-            <SelectValue placeholder="Select chat">
+            <SelectValue placeholder="اختر محادثة">
               <div className="flex items-center gap-2">
                 <MessageSquare className="h-4 w-4" />
                 <span className="truncate">
@@ -294,11 +296,11 @@ export function ChatSelector() {
           <SelectContent>
             {isChatsLoading ? (
               <div className="px-2 py-1.5 text-muted-foreground text-sm">
-                جارٍ تحميل المحادثات...
+                {t.loadingChats}
               </div>
             ) : chatsError ? (
               <div className="px-2 py-1.5 text-destructive text-sm">
-                تعذر تحميل المحادثات
+                {t.errorLoadingChats}
               </div>
             ) : chats.length > 0 ? (
               chats.slice(0, 15).map((chat) => (
@@ -311,7 +313,7 @@ export function ChatSelector() {
               ))
             ) : (
               <div className="px-2 py-1.5 text-muted-foreground text-sm">
-                لا توجد محادثات بعد
+                {t.noChatsYet}
               </div>
             )}
           </SelectContent>
@@ -328,7 +330,7 @@ export function ChatSelector() {
                 disabled={isAnyActionPending}
               >
                 <MoreHorizontal className="h-4 w-4" />
-                <span className="sr-only">Chat options</span>
+                <span className="sr-only">خيارات المحادثة</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -369,7 +371,7 @@ export function ChatSelector() {
                 disabled={isAnyActionPending}
               >
                 <Edit2 className="me-2 h-4 w-4" />
-                Rename Chat
+                إعادة تسمية المحادثة
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -385,18 +387,18 @@ export function ChatSelector() {
         )}
       </div>
 
-      {/* Rename Chat Dialog */}
+      {/* إعادة تسمية المحادثة Dialog */}
       <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Rename Chat</DialogTitle>
+            <DialogTitle>إعادة تسمية المحادثة</DialogTitle>
             <DialogDescription>
-              Enter a new name for this chat.
+              أدخل اسمًا جديدًا لهذه المحادثة.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <Input
-              placeholder="Chat name"
+              placeholder="اسم المحادثة"
               value={renameChatName}
               onChange={(e) => setRenameChatName(e.target.value)}
               onKeyDown={(e) => {
@@ -422,7 +424,7 @@ export function ChatSelector() {
               onClick={handleRenameChat}
               disabled={isRenamingChat || !renameChatName.trim()}
             >
-              {isRenamingChat ? "Renaming..." : "Rename Chat"}
+              {isRenamingChat ? "جارٍ إعادة التسمية..." : "إعادة تسمية المحادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -492,9 +494,9 @@ export function ChatSelector() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Change Chat Visibility</DialogTitle>
+            <DialogTitle>تغيير خصوصية المحادثة</DialogTitle>
             <DialogDescription>
-              Choose who can see and access this chat.
+              اختر من يمكنه رؤية هذه المحادثة والوصول إليها.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
