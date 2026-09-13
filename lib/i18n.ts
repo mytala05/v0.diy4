@@ -51,6 +51,18 @@ export const dictionary = {
     searchProjects: "ابحث عن مشروع...",
     noProjectsYet: "لا توجد مشاريع بعد",
     createFirstProject: "ابدأ بإنشاء مشروعك الأول.",
+    chatOptions: "خيارات المحادثة",
+    renameChat: "إعادة تسمية المحادثة",
+    renameChatDescription: "أدخل اسمًا جديدًا لهذه المحادثة.",
+    chatName: "اسم المحادثة",
+    renaming: "جارٍ إعادة التسمية...",
+    deleteChat: "حذف المحادثة",
+    deleteChatDescription:
+      "هل أنت متأكد من حذف هذه المحادثة؟ لا يمكن التراجع عن هذا الإجراء، وسيؤدي إلى حذف المحادثة ورسائلها نهائيًا.",
+    duplicateChat: "نسخ المحادثة",
+    duplicateChatDescription:
+      "سيتم إنشاء نسخة من المحادثة الحالية. ستتم إعادة توجيهك إلى المحادثة الجديدة بعد إنشائها.",
+    duplicating: "جارٍ النسخ...",
   },
   en: {
     brand: "v0 Platform",
@@ -102,6 +114,17 @@ export const dictionary = {
     searchProjects: "Search for a project...",
     noProjectsYet: "No projects yet",
     createFirstProject: "Get started by creating your first project.",
+    chatOptions: "Chat options",
+    renameChat: "Rename chat",
+    renameChatDescription: "Enter a new name for this chat.",
+    chatName: "Chat name",
+    renaming: "Renaming...",
+    deleteChat: "Delete chat",
+    deleteChatDescription:
+      "Are you sure you want to delete this chat? This action cannot be undone.",
+    duplicateChat: "Duplicate chat",
+    duplicateChatDescription: "This will create a copy of the current chat.",
+    duplicating: "Duplicating...",
   },
 } as const;
 

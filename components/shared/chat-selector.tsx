@@ -106,8 +106,8 @@ const fetcher = async (url: string): Promise<Chat[]> => {
 
 // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: This coordinator intentionally owns the chat menu actions and dialogs.
 export function ChatSelector() {
-  const router = useRouter();
   const t = getDictionary("ar");
+  const router = useRouter();
   const pathname = usePathname();
   const { data: session } = useSession();
   const {
@@ -371,7 +371,7 @@ export function ChatSelector() {
                 disabled={isAnyActionPending}
               >
                 <Edit2 className="me-2 h-4 w-4" />
-                إعادة تسمية المحادثة
+                {t.renameChat}
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -387,18 +387,18 @@ export function ChatSelector() {
         )}
       </div>
 
-      {/* إعادة تسمية المحادثة Dialog */}
+      {/* {t.renameChat} Dialog */}
       <Dialog open={isRenameDialogOpen} onOpenChange={setIsRenameDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>إعادة تسمية المحادثة</DialogTitle>
+            <DialogTitle>{t.renameChat}</DialogTitle>
             <DialogDescription>
               أدخل اسمًا جديدًا لهذه المحادثة.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
             <Input
-              placeholder="اسم المحادثة"
+              placeholder={t.chatName}
               value={renameChatName}
               onChange={(e) => setRenameChatName(e.target.value)}
               onKeyDown={(e) => {
@@ -418,13 +418,13 @@ export function ChatSelector() {
               }}
               disabled={isRenamingChat}
             >
-              Cancel
+              {t.cancel}
             </Button>
             <Button
               onClick={handleRenameChat}
               disabled={isRenamingChat || !renameChatName.trim()}
             >
-              {isRenamingChat ? "جارٍ إعادة التسمية..." : "إعادة تسمية المحادثة"}
+              {isRenamingChat ? "جارٍ إعادة التسمية..." : "{t.renameChat}"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -435,10 +435,7 @@ export function ChatSelector() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>حذف المحادثة</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this chat? This action cannot be
-              undone and will permanently remove the chat and all its messages.
-            </DialogDescription>
+            <DialogDescription>{t.deleteChatDescription}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -446,7 +443,7 @@ export function ChatSelector() {
               onClick={() => setIsDeleteDialogOpen(false)}
               disabled={isDeletingChat}
             >
-              Cancel
+              {t.cancel}
             </Button>
             <Button
               variant="destructive"
@@ -467,10 +464,7 @@ export function ChatSelector() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>نسخ المحادثة</DialogTitle>
-            <DialogDescription>
-              This will create a copy of the current chat. You'll be redirected
-              to the new chat once it's created.
-            </DialogDescription>
+            <DialogDescription>{t.duplicateChatDescription}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button
@@ -478,10 +472,10 @@ export function ChatSelector() {
               onClick={() => setIsDuplicateDialogOpen(false)}
               disabled={isDuplicatingChat}
             >
-              Cancel
+              {t.cancel}
             </Button>
             <Button onClick={handleDuplicateChat} disabled={isDuplicatingChat}>
-              {isDuplicatingChat ? "جارٍ النسخ..." : "نسخ المحادثة"}
+              {isDuplicatingChat ? "جارٍ النسخ..." : "نسخ الم��ادثة"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -579,7 +573,7 @@ export function ChatSelector() {
               onClick={() => setIsVisibilityDialogOpen(false)}
               disabled={isChangingVisibility}
             >
-              Cancel
+              {t.cancel}
             </Button>
             <Button
               onClick={handleChangeVisibility}
